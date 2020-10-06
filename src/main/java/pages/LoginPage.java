@@ -15,7 +15,7 @@ public class LoginPage {
   private SelenideElement userNameInput = $(byId("login-form-username"));
   private SelenideElement passwordInput = $(byId("login-form-password"));
   private SelenideElement loginButton = $(byId("login"));
-  private String message = "Извините, имя пользователя или пароль неверны - пожалуйста, попробуйте еще раз.";
+  private String message = "Sorry, your username and password are incorrect - please try again.";
   private SelenideElement errorMessage = $(byXpath("//*[text()[contains(.,'" + message + "')]]"));
 
   public LoginPage(Driver driver) {
