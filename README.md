@@ -120,7 +120,7 @@ CMD git clone https://github.com/IrinaYu/SelenideAllTests.git && cd Selenide* &&
 * Выполните команду `docker build -t myimage:latest .`, подождите, пока она выполнится (выполнение этой команды 
 инициирует сборку докер-образа). Результат будет выглядеть так:
 
-![screenshot of sample](https://i.ibb.co/3NTS0RN/Screenshot-from-2020-10-06-21-55-14.png)
+![screenshot of sample](https://i.ibb.co/5THnwBh/Screenshot-from-2020-10-06-22-43-59.png)
 
 * Затем запустите поочередно команды `docker images`, `docker run -d imageId` , где imageId - это Id нужного вам образа,
  который вы можете узнать после запуска предыдущей команды . Таким образом, мы стартуем докер из образа. 
