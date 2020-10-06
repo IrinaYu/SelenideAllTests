@@ -26,9 +26,10 @@
 
 ## Запуск тестов 
 
-### 1. Из IntelliJ IDEA
+### 1. Запуск из IntelliJ IDEA
 * Откройте проект через File - Open - документ pom.xml из неоходимой директории.
 * Пожалуйста, убедитесь, что в pom.xml подтянулись все dependencies и plugins.
+* Также, можно скопировать и вставить их из этих блоков:
 ```java
     <plugins>
                <plugin>
@@ -86,37 +87,40 @@
         </dependencies>
 ```
 * Также проверьте, что бы в /src/test/java во всех тестах прогрузились зависимости.
-* Правой кнопкой мышки нажмите на testng.xml. Выберите "Run'.../testng.xml'"
+* Правой кнопкой мышки нажмите на testng.xml. Выберите "Run'.../testng.xml'".
 * Появление во вкладке 4:Run в IDEA такого результата (Test passed: 12) будет означать, что тесты запустились и успешно прошли.
 ***
 ![screenshot of sample](https://i.ibb.co/hRYMdW3/Screenshot-from-2020-10-06-20-21-29.png)
 
-### 2. Из консоли компьютера
+### 2. Запуск из консоли компьютера
 * Перейдите из консоли в директорию склонированного ранее проекта.
 * Убедитесь, что в директории присутсвует файл POM.xml
+* Выполните команду: `mvn clean test`.
+ Результатом запуска команды будет вывод в консоль логов, а так же текст "BUILD SUCCESS" (см. скриншот)
+ ***
+ ![screenshot of sample](https://i.ibb.co/3NTS0RN/Screenshot-from-2020-10-06-21-55-14.png)
+ 
+ ### 3. Запуск в Docker контейнере со сборкой в CircleCI (для *unix-систем)
+ * Создайте в корне проекта файл "Dockerfile" без расширения/
+ * Добавьте в него код:
+ ```
+FROM circleci/openjdk:8u222-stretch-browsers
+MAINTAINER Your Name 
 
+USER root
+RUN rm -rf /var/lib/apt/lists/* && apt update
+RUN apt-get update
+RUN apt-get install maven
+WORKDIR /usr/app
+COPY . /usr/app
+CMD git clone https://github.com/IrinaYu/SelenideAllTests.git && cd Selenide* && mvn clean test
 
+ ```
+где в качестве Your Name следует указать ваше имя.
+* Выполните команду `docker build -t myimage:latest .`, подождите, пока она выполнится (выполнение этой команды 
+инициирует сборку докер-образа). Результат будет выглядеть так:
 
-REQUIREMENTS
-The minimum requirement by Yii is that your Web server supports PHP 5.1.0 or above. Yii has been tested with Apache HTTP server on Windows and Linux operating systems.
+![screenshot of sample](https://i.ibb.co/3NTS0RN/Screenshot-from-2020-10-06-21-55-14.png)
 
-Please access the following URL to check if your Web server reaches the requirements by Yii, assuming "YiiPath" is where Yii is installed:
-
-  http://hostname/YiiPath/requirements/index.php
-QUICK START
-Yii comes with a command line tool called "yiic" that can create a skeleton Yii application for you to start with.
-
-On command line, type in the following commands:
-
-    $ cd YiiPath/framework                (Linux)
-    cd YiiPath\framework                  (Windows)
-
-    $ ./yiic webapp ../testdrive          (Linux)
-    yiic webapp ..\testdrive              (Windows)
-The new Yii application will be created at "YiiPath/testdrive". You can access it with the following URL:
-
-    http://hostname/YiiPath/testdrive/index.php
-WHAT'S NEXT
-Please visit the project website for tutorials, class reference and join discussions with other Yii users.
-
-The Yii Developer Team http://www.yiiframework.com
+* Затем запустите поочередно команды `docker images`, `docker run -d imageId` , где imageId - это Id нужного вам образа,
+ который вы можете узнать после запуска предыдущей команды . Таким образом, мы стартуем докер из образа. 
